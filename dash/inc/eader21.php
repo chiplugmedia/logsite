@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="noxen">
+  <meta name="keywords" content="noxen">
+  <meta name="author" content="noxen">
+  <link rel="manifest" href="/Flowtrex/user/mPay/manifest.json">
+  <link rel="icon" href="/Flowtrex/user/mPay/assets/images/logo/logo.png" type="image/x-icon">
+  <title><?php echo $ptitle?> - <?php echo $sitename ?></title>
+  <link rel="apple-touch-icon" href="/Flowtrex/user/mPay/assets/images/logo/logo.png">
+  <meta name="theme-color" content="#122636">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="noxen">
+  <meta name="msapplication-TileImage" content="/Flowtrex/user/mPay/assets/images/logo/logo.png">
+  <meta name="msapplication-TileColor" content="#FFFFFF">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Google font-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&amp;display=swap" rel="stylesheet">
+
+  <!-- iconsax css -->
+  <link rel="stylesheet" type="text/css" href="/Flowtrex/user/mPay/assets/css/vendors/iconsax.css">
+
+
+  <!-- bootstrap css -->
+   <link rel="stylesheet" type="text/css" href="/Flowtrex/user/mPay/assets/css/vendors/bootstrap.min.css">
+  <link rel="stylesheet" id="rtl-link" type="text/css" href="/Flowtrex/user/mPay/assets/css/vendors/bootstrap.min.css" />
+
+  <!-- swiper css -->
+  <link rel="stylesheet" type="text/css" href="/Flowtrex/user/mPay/assets/css/vendors/swiper-bundle.min.css">
+
+  <!-- Theme css -->
+   <link rel="stylesheet" id="change-link" type="text/css" href="/Flowtrex/user/mPay/assets/css/style.css">
+</head>
+
+<header class="section-t-space">
+    <div class="custom-container">
+      <div class="header-panel">
+        <a href="/dash" class="back-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left icon"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        </a>
+        <h2><?php echo $ptitle?></h2>
+      </div>
+    </div>
+  </header>
+  

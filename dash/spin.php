@@ -1,0 +1,206 @@
+<?php 
+require $_SERVER['DOCUMENT_ROOT']."/stream.php";
+require $_SERVER['DOCUMENT_ROOT']."$stream/includes/generalinclude.php";
+require $_SERVER['DOCUMENT_ROOT']."$stream/dash/includes/generalinclude.php";
+$ptitle="Product ";
+
+include "inc/header2.php" ;
+
+?>
+
+<div><?php echo $genMsg?></div>
+
+
+
+<?php
+
+// Check if the category ID is set in the URL
+if (!isset($_GET['id'])) {
+    echo 'Category ID not specified.';
+    exit();
+}
+
+$category_id = $_GET['id'];
+
+// Prepare and execute the query to fetch the category details
+$sql = "SELECT * FROM categories WHERE id = ?";
+$stmt = mysqli_prepare($link, $sql);
+
+if ($stmt) {
+    mysqli_stmt_bind_param($stmt, "i", $category_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (mysqli_num_rows($result) > 0) {
+        // Fetch the category details
+        $categoryRow = mysqli_fetch_assoc($result);
+        $categoryName = $categoryRow['name'];
+
+        // Query to fetch products for the specified category, ordered by id descending
+        $productStmt = $link->prepare("SELECT * FROM products WHERE category = ? AND status = 'active' ORDER BY id DESC");
+        $productStmt->bind_param("s", $categoryName);
+        $productStmt->execute();
+        $productResult = $productStmt->get_result();
+        $numrow = $productResult->num_rows;
+
+        if ($numrow > 0) {
+            // Initialize an array to track unique product names
+            $uniqueProducts = [];
+
+            echo '<div class="pc-container">
+                    <div class="pc-content">
+                        <section class="catalog-section section-bg py-120">
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col-xxl-10 col-xl-11">
+                                        <div class="catalog-item-wrapper">
+                                            <div style="border-radius: 100px; background: #10113D; color: #ffffff; padding: 10px; margin-bottom: 15px">
+                                                <div class="row">
+                                                    <div class="col-2"></div>
+                                                    <div class="col-3">Product</div>
+                                                    <div class="col-5">Price</div>
+                                                    <div class="col-2">Stock</div>
+                                                </div>
+                                            </div>';
+
+            // Product listing
+            while ($row = $productResult->fetch_assoc()) {
+                $productName = $row['name'];
+                $price = $row['price'];
+                $id = $row['id'];
+                $type = $row['type'];
+
+                // Skip duplicate product names
+                if (in_array($productName, $uniqueProducts)) {
+                    continue;
+                }
+
+                // Add product name to the uniqueProducts array
+                $uniqueProducts[] = $productName;
+
+                // Query to get the total amount of a specific product within a category
+                $quantityStmt = $link->prepare("SELECT COUNT(*) AS total FROM products WHERE category = ? AND name = ? AND status = 'active'");
+                $quantityStmt->bind_param("ss", $categoryName, $productName);
+                $quantityStmt->execute();
+                $quantityResult = $quantityStmt->get_result();
+                $totalQuantity = $quantityResult->fetch_assoc()['total'];
+
+                // Determine image based on type
+                $imageMap = [
+                    "facebook" => "facebook.png",
+                    "instagram" => "instagram.png",
+                    "twitter" => "twitter.png",
+                    "youtube" => "youtube.png",
+                    "telegram" => "telegram.png",
+                    "whatsapp" => "whatsapp.png",
+                    "textnow" => "textnow.png",
+                    "mail" => "mail.jpeg",
+                    "outlook" => "outlook.png",
+                    "piavpn" => "piavpn.png",
+                    "nordvpn" => "nordvpn.png",
+                    "ipvanishvpn" => "ipvanishvpn.png",
+                    "expressvpn" => "expressvpn.png",
+                    "surfshark" => "surfshark.png",
+                    "snapchat" => "snapchat.png",
+                    "oldreddit" => "oldreddit.png",
+                    "applemusic" => "applemusic.png",
+                    "netflix" => "netflix.png",
+                    "textplus" => "textplus.png",
+                    "googlevoice" => "googlevoice.png",
+                    "textfree" => "textfree.png",
+                    "talkatone" => "talkatone.png",
+                    "yellowupdate" => "yellowupdate.png",
+                    "fakeflightticket" => "fakeflightticket.png",
+                ];
+
+                $imageSrc = $imageMap[$type] ?? 'default.png';
+
+                echo '<div class="col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item px-0 py-2">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <img src="img/' . htmlspecialchars($imageSrc) . '" alt="img" class="wid-35 rounded-circle">
+                                            </div>
+                                            <div class="flex-grow-1 mx-3">
+                                                <p class="mb-1">
+                                                    <a class="text-small text-dark" href="details.php?id=' . htmlspecialchars($id) . '" style="font-size: 12px;">
+                                                        ' . htmlspecialchars($productName) . '
+                                                    </a>
+                                                </p>
+                                                <p class="mb-0 text-muted">
+                                                    <a class="text-white btn btn-dark btn-rounded btn-sm" style="font-size: 12px; font-weight: bolder"> Price: ₦' . number_format($price, 2) . '</a>
+                                                 | <a class="text-white btn btn-dark btn-rounded btn-sm"
+                                     style="font-size: 12px; font-weight: bolder">' . htmlspecialchars($totalQuantity) . ' </a></p>
+                                            </div>
+                                            <div class="col-2">
+                                                <div class="d-flex justify-content-center row">
+                                                    <div class="col-12">
+                                                        <span class="text-small col-sm-12 badge bg-dark mb-1"></span>
+                                                    </div>
+                                                    <div class="col-12 d-flex justify-content-center">
+                                                        <a href="details.php?id=' . htmlspecialchars($id) . '" style="font-size: 8px" class="btn btn-sm">
+                                                            <svg width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <g clip-path="url(#clip0_206_491)">
+                                                                    <path d="M18.4615 4.9659H14.6154C14.6154 3.7335 14.1291 2.55156 13.2636 1.68011C12.398 0.808664 11.2241 0.319092 10 0.319092C8.77592 0.319092 7.60198 0.808664 6.73643 1.68011C5.87087 2.55156 5.38462 3.7335 5.38462 4.9659H1.53846C1.13044 4.9659 0.739123 5.12909 0.450604 5.41958C0.162087 5.71005 0 6.10403 0 6.51484V18.1319C0 18.5427 0.162087 18.9366 0.450604 19.2271C0.739123 19.5176 1.13044 19.6808 1.53846 19.6808H18.4615C18.8696 19.6808 19.2609 19.5176 19.5494 19.2271C19.8379 18.9366 20 18.5427 20 18.1319V6.51484C20 6.10403 19.8379 5.71005 19.5494 5.41958C19.2609 5.12909 18.8696 4.9659 18.4615 4.9659ZM6.92309 8.83824C6.92309 9.04365 6.84204 9.24062 6.69777 9.38588C6.55351 9.53111 6.35785 9.61271 6.15385 9.61271C5.94983 9.61271 5.75417 9.53111 5.60992 9.38588C5.46566 9.24062 5.38462 9.04365 5.38462 8.83824V7.2893C5.38462 7.0839 5.46566 6.88692 5.60992 6.74167C5.75417 6.59643 5.94983 6.51484 6.15385 6.51484C6.35785 6.51484 6.55351 6.59643 6.69777 6.74167C6.84204 6.88692 6.92309 7.0839 6.92309 7.2893V8.83824ZM10 1.86803C10.816 1.86803 11.5987 2.19441 12.1757 2.77537C12.7527 3.35635 13.0769 4.14428 13.0769 4.9659H6.92309C6.92309 4.14428 7.24726 3.35635 7.82428 2.77537C8.40132 2.19441 9.18396 1.86803 10 1.86803ZM14.6154 8.83824C14.6154 9.04365 14.5343 9.24062 14.3901 9.38588C14.2458 9.53111 14.0502 9.61271 13.8461 9.61271C13.6421 9.61271 13.4465 9.53111 13.3022 9.38588C13.158 9.24062 13.0769 9.04365 13.0769 8.83824V7.2893C13.0769 7.0839 13.158 6.88692 13.3022 6.74167C13.4465 6.59643 13.6421 6.51484 13.8461 6.51484C14.0502 6.51484 14.2458 6.59643 14.3901 6.74167C14.5343 6.88692 14.6154 7.0839 14.6154 7.2893V8.83824Z" fill="#20CCB4"></path>
+                                                                </g>
+                                                                <defs>
+                                                                    <clipPath id="clip0_206_491">
+                                                                        <rect width="20" height="20" fill="white"></rect>
+                                                                    </clipPath>
+                                                                </defs>
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>';
+            }
+
+            echo '
+            </section>
+        ';
+        } else {
+            // Display a message if no products are available
+            echo '<div class="pc-container">
+                    <div class="pc-content">
+                        <section class="catalog-section section-bg py-120">
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col-xxl-10 col-xl-11">
+                                        <div class="catalog-item-wrapper">
+                                            <div style="border-radius: 100px; background: #10113D; color: #ffffff; padding: 10px; margin-bottom: 15px">
+                                                <div class="row">
+                                                    <div class="col-2"></div>
+                                                    <div class="col-3">Product</div>
+                                                    <div class="col-5">Price</div>
+                                                    <div class="col-2">Stock</div>
+                                                </div>
+                                            </div>
+                                            <p>No available product for this Category.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>';
+        }
+    } else {
+        echo 'Category not found.';
+    }
+} else {
+    echo 'Failed to prepare statement.';
+}
+
+?>
+
+
+<?php include "inc/footer2.php" ?>

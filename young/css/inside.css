@@ -1,0 +1,113 @@
+
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.h5 {
+  font-size: 1.25rem;
+}
+
+.mb-2 {
+  margin-bottom: 8px;
+}
+
+.progress {
+  height: 10px;
+  border-radius: 10px;
+  background-color: #ddd;
+  overflow: hidden;
+}
+
+.progress[value] {
+  background-color: #4CAF50;
+  width: calc((var(--value) / var(--max)) * 100%);
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.input-group-divider {
+  grid-template-columns: auto 1fr auto;
+}
+
+.input-group-shim {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid #ddd;
+}
+
+.input-group-shim svg {
+  width: 20px;
+  height: 20px;
+}
+
+input[type="search"] {
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.card:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-hover {
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.card p-3 {
+  padding: 10px;
+}
+
+.rounded-lg {
+  border-radius: 10px;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.gap-2 {
+  gap: 8px;
+}
+
+.w-10 {
+  width: 40px;
+}
+
+.h4 {
+  font-size: 1.25rem;
+}
+
+.fa-icon {
+  width: 20px;
+  height: 20px;
+  fill: #666;
+}
